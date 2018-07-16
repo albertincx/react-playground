@@ -1,6 +1,27 @@
 import * as React from "react";
+import config from "Playground/config";
+import {CustomGameProps} from "Playground/interfaces/game";
 
-class Snake extends React.Component<{}, {}> {
+interface SnakeStateValues {
+    cells: any[],
+    snake: number[][],
+    foodCell: number[],
+    direction?: string
+}
+
+interface SnakeState {
+    values: SnakeStateValues
+}
+
+const allowedKeys = [
+    'w', config.KEY_UP,
+    'd', config.KEY_RIGHT,
+    's', config.KEY_DOWN,
+    'a', config.KEY_LEFT,
+    config.KEY_ESCAPE, config.KEY_SPACE
+];
+
+class Snake extends React.Component<CustomGameProps, SnakeState> {
     private canvas: HTMLCanvasElement;
     private running: any;
     private timer: number = 2;
@@ -10,7 +31,7 @@ class Snake extends React.Component<{}, {}> {
     }
 
     public loop() {
-        let timeout = 100;
+        const timeout = 100;
 
         clearInterval(this.running);
         this.running = setInterval(() => {
@@ -30,6 +51,13 @@ class Snake extends React.Component<{}, {}> {
         }
     }
 
+    public render() {
+        const {width, height} = this.props;
+        return (
+            <canvas ref={el => this.canvas = el} width={width} height={height}/>
+        );
+    }
+
     private run(force: boolean = false) {
 
         if (force) {
@@ -46,12 +74,12 @@ class Snake extends React.Component<{}, {}> {
             this.loop();
         }
 
-        this.draw('Snake running' + Array(this.timer).join('.') + this.props.setting.key);
+        this.draw('Snake running' + Array(this.timer).join('.') + this.props.keys.key);
     }
 
     private draw(str: string) {
-        const width = 500;
-        const height = 100;
+        const {width, height} = this.props;
+
         if (this.canvas) {
             const ctx = this.canvas.getContext('2d');
 
@@ -62,15 +90,6 @@ class Snake extends React.Component<{}, {}> {
             ctx.fillText(str, 10, 50);
 
         }
-    }
-
-    public render() {
-        const width = 500;
-        const height = 100;
-
-        return (
-            <canvas ref={el => this.canvas = el} width={width} height={height}/>
-        );
     }
 }
 

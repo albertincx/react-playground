@@ -1,19 +1,25 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import config from "Playground/config";
+import {GameProps} from "Playground/interfaces/game";
+import {ApplicationState} from "Playground/interfaces/app";
+
+interface GameWrapper {
+    key: string
+}
 
 export default function connectGame(GameComponent: any) {
 
-    class Game extends React.Component<{}, {}> {
+    class Game extends React.Component<GameProps, GameWrapper> {
         private el: HTMLDivElement;
 
-        constructor(props: any) {
+        constructor(props: GameProps) {
             super(props);
             this.state = {
                 key: ''
             };
             this.handleKeyDown = this.handleKeyDown.bind(this);
-
+            this.gameOver = this.gameOver.bind(this);
         }
 
         public componentDidMount() {
@@ -24,10 +30,30 @@ export default function connectGame(GameComponent: any) {
             this.el.removeEventListener('keydown', this.handleKeyDown);
         }
 
+        public render() {
+            const {width, height} = this.props.setting;
+            const keys = {
+                key: this.state.key
+            };
+            return (
+                <div ref={el => this.el = el} tabIndex={0}>
+                    <GameComponent
+                        keys={keys}
+                        width={width}
+                        height={height}
+                        onGameOver={this.gameOver}
+                    />
+                </div>
+            );
+        }
+
+        private gameOver() {
+            this.props.gameOver();
+        }
+
         private handleKeyDown(event: KeyboardEvent) {
             event.preventDefault();
-            const isGameStarted = false;
-            const isGameOver = false;
+            const {isGameStarted, isGameOver} = this.props;
             let key: string = event.key;
             switch (key) {
                 case ' ':
@@ -51,35 +77,25 @@ export default function connectGame(GameComponent: any) {
                 default:
                     break;
             }
-            this.setState({
-                key
-            });
-        }
-
-        gameOver() {
-            //
-        }
-
-        render() {
-            const props = {...this.props};
-            props.setting = {
-                key: this.state.key
-            };
-
-            return (
-                <div ref={el => this.el = el} tabIndex={0}>
-                    <GameComponent
-                        {...props}
-                        onGameOver={this.gameOver}
-                    />
-                </div>
-            );
+            this.setState({key});
         }
     }
 
-    function mapStateToProps() {
-        return {};
-    }
+    const mapStateToProps = (state: ApplicationState): any => {
+        const {isGameStarted, setting, setting: {hash}, isGameOver} = state.playground;
+        // console.log(setting.key)
+        return {
+            isGameOver,
+            setting,
+            isGameStarted
+        };
+    };
+    const mapDispatchToProps = (dispatch: any): GameProps => {
+        return {
+            gameOver: (): void => dispatch({type: "GAME_OVER"}),
+            restart: (): void => dispatch({type: "RESTART_GAME"}),
+        };
+    };
 
-    return connect(mapStateToProps)(Game);
+    return connect<typeof mapStateToProps, GameProps, void>(mapStateToProps, mapDispatchToProps)(Game);
 }
