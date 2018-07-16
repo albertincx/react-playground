@@ -1,7 +1,7 @@
 const MAX_SPEED = 10;
 const MIN_SPEED = 3;
 const MIN_WIDTH = 500;
-const MIN_HEIGHT = 500;
+const MIN_HEIGHT = 100;
 
 // playgroundMIN_WIDTH % x === 0 !important
 const CELL_BOX = 10;

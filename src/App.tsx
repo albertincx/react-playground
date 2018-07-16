@@ -1,25 +1,80 @@
 import * as React from "react";
 import {connect} from 'react-redux';
-import Playground from "./components/Playground";
-
-import './css/style.css';
+import config from 'Playground/config';
+import Playground from "Playground/components/Playground";
 import {ApplicationState, AppProps} from "Playground/interfaces/app";
 
+import './css/style.css';
+import 'react-rangeslider/lib/index.css';
+
+const Slider = require('react-rangeslider').default;
+
 class App extends React.Component<AppProps, {}> {
+    private readonly maxWidth: number;
+    private readonly maxHeight: number;
 
     constructor(props: any) {
         super(props);
+        this.maxWidth = window.innerWidth - 50;
+        this.maxHeight = window.innerHeight - 200;
+        this.handleChange = this.handleChange.bind(this);
+
     }
+
     public componentDidMount() {
         this.props.selectGame('Snake');
     }
 
     public render() {
+        const {setting, currentGame} = this.props;
+
         return (
             <div className='application'>
                 <h1>Welcome to playground application</h1>
+                <div>
+                    <div>Dimensions</div>
+                    <br/>
+                    <Slider
+                        min={config.MIN_WIDTH}
+                        max={this.maxWidth}
+                        value={setting.width}
+                        step={setting.cellBox}
+                        onChange={(value: number) => this.handleChange(value, 'width')}
+                    />
+                    <Slider
+                        min={config.MIN_HEIGHT}
+                        max={this.maxHeight}
+                        value={setting.height}
+                        step={setting.cellBox}
+                        onChange={(value: number) => this.handleChange(value, 'height')}
+                    />
+                    <div>Speed</div>
+                    <Slider
+                        min={1}
+                        max={config.MAX_SPEED}
+                        value={setting.speed}
+                        step={1}
+                        onChange={(value: number) => this.handleChange(value, 'speed')}
+                    />
+                    <Slider
+                        min={config.CELL_BOX}
+                        max={config.CELL_BOX * 20}
+                        value={setting.cellBox}
+                        step={10}
+                        onChange={(value: number) => this.handleChange(value, 'cellBox')}
+                    />
+                </div>
+                <div>{currentGame} loaded</div>
                 <Playground/>
             </div>
+        );
+    }
+
+    private handleChange(value: number, name: string) {
+        const {setting} = this.props;
+        setting[name] = value;
+        this.props.gameSetting(
+            setting
         );
     }
 }

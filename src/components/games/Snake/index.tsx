@@ -44,7 +44,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
     }
 
     public componentDidMount() {
-        if (true) {
+        if (this.props.isGameStarted) {
             this.run();
         } else {
             clearInterval(this.running);
@@ -82,13 +82,11 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
 
         if (this.canvas) {
             const ctx = this.canvas.getContext('2d');
-
             ctx.fillStyle = '#fff';
             ctx.fillRect(0, 0, width, height);
             ctx.fillStyle = '#000';
             ctx.font = '31px sans-serif';
             ctx.fillText(str, 10, 50);
-
         }
     }
 }

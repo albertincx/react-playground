@@ -8,6 +8,8 @@ export interface GameProps extends SharedReduxProps {
 }
 
 export interface CustomGameProps {
+    isGameStarted: boolean,
+    isGameOver: boolean,
     width: number,
     height: number,
     keys: {

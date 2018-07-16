@@ -1,6 +1,65 @@
 .application {
-  padding: 5px;
+
   .playground {
-    border: 1px solid #ddd;
+    .image-repeat {max-width: 64px;max-height: 64px;background-repeat: no-repeat;background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTcuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDM2Mi4wMDEgMzYyLjAwMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzYyLjAwMSAzNjIuMDAxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjMycHgiIGhlaWdodD0iMzJweCI+CjxwYXRoIGQ9Ik0xODEsMEM4MS4xOTYsMCwwLDgxLjE5NywwLDE4MXM4MS4xOTYsMTgxLDE4MSwxODFzMTgxLTgxLjE5NiwxODEtMTgxUzI4MC44MDUsMCwxODEsMHogTTMwOC4xMjUsMjUwLjcxOSAgYy0xLjY3MiwxLjk0NS00LjA4NiwzLjAxNy02LjgsMy4wMTdjLTEuNTkxLDAtMy4yNDktMC4zNjYtNC45MjgtMS4wODlsLTI5LjA4OC0xMi41MTdjLTE5LjgxOSwzMS44MjMtNTUuMTE5LDUzLjA1Mi05NS4yOSw1My4wNTIgIGMtNjEuODU3LDAtMTEyLjE4Mi01MC4zMjQtMTEyLjE4Mi0xMTIuMTgyUzExMC4xNjIsNjguODE5LDE3Mi4wMTksNjguODE5YzguMjg0LDAsMTUsNi43MTYsMTUsMTVzLTYuNzE2LDE1LTE1LDE1ICBjLTQ1LjMxNSwwLTgyLjE4MiwzNi44NjYtODIuMTgyLDgyLjE4MnMzNi44NjcsODIuMTgyLDgyLjE4Miw4Mi4xODJjMjcuODA5LDAsNTIuNDE5LTEzLjg5Nyw2Ny4yOTYtMzUuMDk4bC0yNy4zMzQtMTEuNzYyICBjLTMuODg2LTEuNjcyLTYuMzE1LTQuNjI5LTYuNjY3LTguMTEyYy0wLjM1Mi0zLjQ4MywxLjQzOS02Ljg2NSw0LjkxMi05LjI3OWw3MC41Ni00OS4wMzRjMi4xMy0xLjQ4LDQuNDQ5LTIuMjYzLDYuNzA4LTIuMjYzICBjNS4wMjgsMCw4Ljk3OSwzLjc2OSw5LjgzMiw5LjM3OWwxMi45MDYsODQuOTQ5QzMxMC43NTYsMjQ1LjQxNywzMTAuMDA4LDI0OC41MjgsMzA4LjEyNSwyNTAuNzE5eiIgZmlsbD0iIzAwNkRGMCIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K)}
+    margin: 20px;
+    border: 1px solid #000;
+    position: relative;
+    .game-space {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .game-over-wrapper {
+        text-align: center;
+        font-size: 74px;
+        .game-over {
+          @keyframes LineHeight {
+            100% {
+              line-height: 112px;
+              font-size: 87px;
+            }
+          }
+          background: #fff;
+          text-align: center;
+          font-size: 67px;
+          padding: 21px;
+          border-radius: 9px;
+          opacity: 0.3;
+          line-height: 32px;
+          animation: LineHeight 0.05s linear forwards 0.03s;
+        }
+        button {
+          padding: 16px;
+          //background-color:transparent !important;
+        }
+        button {
+          display: block;
+          margin: 0 auto;
+          position: relative;
+          z-index: 9999;
+          top: 10px;
+        }
+      }
+      .game-start,.game-over-wrapper,.game-over {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+      }
+      button.control {
+        background: #3a76fd;
+        border-radius: 3px;
+        padding: 10px;
+        &:not(.game-start) {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+  button {
+    color: white;
+    border: none;
+    background: none;
   }
 }

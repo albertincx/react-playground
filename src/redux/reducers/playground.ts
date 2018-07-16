@@ -56,6 +56,12 @@ export default function playground(state: PlaygroundState = defaultState, action
             return {
                 ...state
             };
+        case 'KEY_PRESSED':
+            state.setting.key = action.key;
+            state.hash = Math.random();
+            return {
+                ...state
+            };
         default:
             break;
     }
