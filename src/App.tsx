@@ -4,8 +4,8 @@ import config from 'Playground/config';
 import Playground from "Playground/components/Playground";
 import {ApplicationState, AppProps} from "Playground/interfaces/app";
 
-import './css/style.css';
 import 'react-rangeslider/lib/index.css';
+import './css/style.css';
 import ReduxConstants from "Playground/redux/types/redux";
 
 const Slider = require('react-rangeslider').default;
@@ -31,10 +31,9 @@ class App extends React.Component<AppProps, {}> {
 
         return (
             <div className='application'>
-                <h1>Welcome to playground application</h1>
+                <h1>Welcome to react playground application</h1>
                 <div>
-                    <div>Dimensions</div>
-                    <br/>
+                    <div>Width</div>
                     <Slider
                         min={config.MIN_WIDTH}
                         max={this.maxWidth}
@@ -42,6 +41,7 @@ class App extends React.Component<AppProps, {}> {
                         step={setting.cellBox}
                         onChange={(value: number) => this.handleChange(value, 'width')}
                     />
+                    <div>Height</div>
                     <Slider
                         min={config.MIN_HEIGHT}
                         max={this.maxHeight}
@@ -49,7 +49,7 @@ class App extends React.Component<AppProps, {}> {
                         step={setting.cellBox}
                         onChange={(value: number) => this.handleChange(value, 'height')}
                     />
-                    <div>Speed</div>
+                    <div>Speed (default: {config.MIN_SPEED})</div>
                     <Slider
                         min={1}
                         max={config.MAX_SPEED}

@@ -11,7 +11,12 @@ interface SnakeStateValues {
     direction?: string,
 }
 
+interface SnakeStateScore {
+    apples: number,
+}
+
 interface SnakeState {
+    score: SnakeStateScore,
     values: SnakeStateValues,
 }
 
@@ -30,6 +35,9 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
     constructor(props: CustomGameProps) {
         super(props);
         this.state = {
+            score: {
+                apples: 0
+            },
             values: {
                 cells: [],
                 snake: [[0], [0]],
@@ -82,7 +90,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
     }
 
     private gameOver() {
-        this.props.gameOver();
+        this.props.gameOver(this.state.score);
     }
 
     private loop() {
@@ -142,7 +150,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
         const {setting: {key, cellBox: currentCellBox}} = this.props;
         const {width, height} = this.props.setting;
         const direction = this.getPressedKey(key);
-        const {snake} = this.state.values;
+        const {values: {snake}, score} = this.state;
         let {foodCell} = this.state.values;
 
         const cells = [];
@@ -241,9 +249,11 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
             snake[0].push(growSnake[0]);
             snake[1].push(growSnake[1]);
             foodCell = null;
+            score.apples++;
         }
 
         this.setState({
+            score,
             values: {
                 cells,
                 foodCell,

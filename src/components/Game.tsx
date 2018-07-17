@@ -40,6 +40,8 @@ export default function connectGame(GameComponent: any) {
                         gameOver={this.onGameOver}
                     /> : null}
                     {isGameOver ? <div className='game-over-wrapper'>
+                        {setting.score ? <div className='score'>{Object.keys(setting.score).map((scoreKey: string) => (
+                            <div key={scoreKey}>{scoreKey}:{setting.score[scoreKey]}</div>))}</div> : null}
                         <div className='game-over'>Game over</div>
                         <button className='image-repeat' onClick={this.restart}/>
                     </div> : null}
@@ -51,8 +53,8 @@ export default function connectGame(GameComponent: any) {
             this.props.restart();
         }
 
-        private onGameOver() {
-            this.props.gameOver();
+        private onGameOver(score: object) {
+            this.props.gameOver(score);
         }
 
     }
@@ -68,7 +70,7 @@ export default function connectGame(GameComponent: any) {
     };
     const mapDispatchToProps = (dispatch: any): GameProps => {
         return {
-            gameOver: (): void => dispatch({type: ReduxConstants.GAME_OVER}),
+            gameOver: (score): void => dispatch({type: ReduxConstants.GAME_OVER, data: score}),
             restart: (): void => dispatch({type: ReduxConstants.RESTART_GAME}),
         };
     };

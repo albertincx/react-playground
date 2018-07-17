@@ -7,4 +7,5 @@ export interface Action extends SharedProps {
 export interface PlaygroundAction extends Action {
     currentGame?: string
     key?: any
+    data?: object
 }

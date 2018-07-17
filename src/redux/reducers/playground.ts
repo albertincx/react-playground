@@ -49,6 +49,7 @@ export default function playground(state: PlaygroundState = defaultState, action
             };
         case ReduxConstants.GAME_OVER:
             state.isGameOver = true;
+            state.setting.score = action.data;
             return {
                 ...state
             };

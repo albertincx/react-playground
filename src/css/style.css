@@ -64,4 +64,9 @@
   background: none;
 }
 
+.rangeslider-horizontal .rangeslider__handle:after {
+  box-shadow: none;
+  background: none;
+}
+
 /*# sourceMappingURL=style.css.map */
