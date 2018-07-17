@@ -1,0 +1,10 @@
+const ReduxConstants = {
+    START_GAME:'START_GAME',
+    STOP_GAME:'STOP_GAME',
+    GAME_SELECTED:'GAME_SELECTED',
+    RESTART_GAME:'RESTART_GAME',
+    KEY_PRESSED:'KEY_PRESSED',
+    GAME_OVER:'GAME_OVER',
+    SETTING:'SETTING',
+};
+export default ReduxConstants
