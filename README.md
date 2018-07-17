@@ -13,8 +13,10 @@ https://safiullin.io/playground/
 `$ typescript, tslint, react, react-redux, react-thunk, react-rangeslider ` 
 
 ## contribution
-To create a game, just create pull-request
-Your game should be taken props
+To add a game, just create pull-request
+
+Your game should be based on react and receiving playground props
+
 props structure:
 
 `keys:{key}` - pressed key
