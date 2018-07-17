@@ -2,6 +2,8 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {GameProps} from "Playground/interfaces/game";
 import {ApplicationState} from "Playground/interfaces/app";
+import ReduxConstants from "Playground/redux/types/redux";
+import config from "Playground/config";
 
 interface GameWrapper {
     key: string
@@ -16,39 +18,47 @@ export default function connectGame(GameComponent: any) {
             this.state = {
                 key: ''
             };
-            this.gameOver = this.gameOver.bind(this);
+            this.onGameOver = this.onGameOver.bind(this);
+            this.restart = this.restart.bind(this);
         }
 
         public render() {
-            const {setting, isGameStarted} = this.props;
+            const {setting, isGameStarted, isGameOver} = this.props;
             const keys = {
                 key: setting.key
             };
-
             return (
                 <div style={{
-                    width: setting.width + 'px',
-                    height: setting.height + 'px'
+                    width: setting.width + config.CELL_BOX + 'px',
+                    height: setting.height + config.CELL_BOX + 'px'
                 }}>
                     {isGameStarted ? <GameComponent
                         keys={keys}
-                        width={setting.width}
-                        height={setting.height}
+                        setting={setting}
                         isGameStarted={isGameStarted}
-                        onGameOver={this.gameOver}
+                        isGameOver={isGameOver}
+                        gameOver={this.onGameOver}
                     /> : null}
+                    {isGameOver ? <div className='game-over-wrapper'>
+                        <div className='game-over'>Game over</div>
+                        <button className='image-repeat' onClick={this.restart}/>
+                    </div> : null}
                 </div>
             );
         }
 
-        private gameOver() {
+        private restart() {
+            this.props.restart();
+        }
+
+        private onGameOver() {
             this.props.gameOver();
         }
 
     }
 
     const mapStateToProps = (state: ApplicationState): any => {
-        const {isGameStarted, setting, hash, isGameOver} = state.playground;
+        const {isGameStarted, setting, setting: {hash}, isGameOver} = state.playground;
         return {
             hash,
             isGameOver,
@@ -58,8 +68,8 @@ export default function connectGame(GameComponent: any) {
     };
     const mapDispatchToProps = (dispatch: any): GameProps => {
         return {
-            gameOver: (): void => dispatch({type: "GAME_OVER"}),
-            restart: (): void => dispatch({type: "RESTART_GAME"}),
+            gameOver: (): void => dispatch({type: ReduxConstants.GAME_OVER}),
+            restart: (): void => dispatch({type: ReduxConstants.RESTART_GAME}),
         };
     };
 

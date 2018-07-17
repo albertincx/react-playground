@@ -4,6 +4,7 @@ import connectGame from "Playground/components/Game";
 import {PlaygroundProps} from "Playground/interfaces/playground";
 import {ApplicationState} from "Playground/interfaces/app";
 import config from "Playground/config";
+import ReduxConstants from "Playground/redux/types/redux";
 
 class Playground extends React.Component<PlaygroundProps, {}> {
     private el: HTMLDivElement;
@@ -36,13 +37,13 @@ class Playground extends React.Component<PlaygroundProps, {}> {
         }
         return (
             <div className='playground' style={{
-                width: setting.width + 'px',
-                height: setting.height + 'px'
+                width: setting.width + config.CELL_BOX + 'px',
+                height: setting.height + config.CELL_BOX + 'px'
             }} ref={el => this.el = el} tabIndex={0}>
                 <div className="game-space">
                     {currentGame ? <div>
                         {isGameStarted ? <Game/> : null}
-                        {isGameStarted || isGameOver ?
+                        {isGameStarted ?
                             <button onClick={this.stopGame} className='control'>Stop Game (or press `Esc`)</button> :
                             <button className='game-start control' onClick={this.startGame}>Press Space to start
                                 game</button>}
@@ -108,9 +109,9 @@ const mapStateToProps = (state: ApplicationState): any => {
 
 const mapDispatchToProps = (dispatch: any): PlaygroundProps => {
     return {
-        startGame: (setting?: any): void => dispatch({type: "START_GAME", setting}),
-        stopGame: (): void => dispatch({type: "STOP_GAME"}),
-        command: (key: string): void => dispatch({type: 'KEY_PRESSED', key})
+        startGame: (setting?: any): void => dispatch({type: ReduxConstants.START_GAME, setting}),
+        stopGame: (): void => dispatch({type: ReduxConstants.STOP_GAME}),
+        command: (key: string): void => dispatch({type: ReduxConstants.KEY_PRESSED, key})
     };
 };
 

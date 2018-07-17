@@ -2,6 +2,7 @@ import {PlaygroundState} from "Playground/interfaces/playground";
 import {PlaygroundAction} from "../types/actions";
 
 import config from "Playground/config";
+import ReduxConstants from "Playground/redux/types/redux";
 
 const defaultSettings = {
     width: config.MIN_WIDTH,
@@ -20,43 +21,44 @@ const defaultState: PlaygroundState = {
 export default function playground(state: PlaygroundState = defaultState, action: PlaygroundAction): PlaygroundState {
     switch (action.type) {
 
-        case 'GAME_SELECTED': {
+        case ReduxConstants.GAME_SELECTED: {
             state.currentGame = action.currentGame;
             return {
                 ...state
             };
         }
-        case 'RESTART_GAME':
+        case ReduxConstants.RESTART_GAME:
             state.setting.hash = Math.random();
             state.isGameStarted = true;
             state.isGameOver = false;
             return {
                 ...state
             };
-        case 'START_GAME':
+        case ReduxConstants.START_GAME:
             state.setting.hash = Math.random();
             state.isGameStarted = true;
             state.isGameOver = false;
             return {
                 ...state
             };
-        case 'STOP_GAME':
+        case ReduxConstants.STOP_GAME:
             state.isGameStarted = false;
+            state.setting.hash = Math.random();
             return {
                 ...state
             };
-        case 'GAME_OVER':
+        case ReduxConstants.GAME_OVER:
             state.isGameOver = true;
             return {
                 ...state
             };
-        case 'SETTING':
+        case ReduxConstants.SETTING:
             state.setting.hash = Math.random();
             state.setting = action.setting;
             return {
                 ...state
             };
-        case 'KEY_PRESSED':
+        case ReduxConstants.KEY_PRESSED:
             state.setting.key = action.key;
             state.hash = Math.random();
             return {

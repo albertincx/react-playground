@@ -7,11 +7,7 @@ export interface GameProps extends SharedReduxProps {
     readonly restart: () => void
 }
 
-export interface CustomGameProps {
-    isGameStarted: boolean,
-    isGameOver: boolean,
-    width: number,
-    height: number,
+export interface CustomGameProps extends GameProps {
     keys: {
         key: string
     }

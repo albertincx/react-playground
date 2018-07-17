@@ -6,6 +6,7 @@ import {ApplicationState, AppProps} from "Playground/interfaces/app";
 
 import './css/style.css';
 import 'react-rangeslider/lib/index.css';
+import ReduxConstants from "Playground/redux/types/redux";
 
 const Slider = require('react-rangeslider').default;
 
@@ -56,13 +57,6 @@ class App extends React.Component<AppProps, {}> {
                         step={1}
                         onChange={(value: number) => this.handleChange(value, 'speed')}
                     />
-                    <Slider
-                        min={config.CELL_BOX}
-                        max={config.CELL_BOX * 20}
-                        value={setting.cellBox}
-                        step={10}
-                        onChange={(value: number) => this.handleChange(value, 'cellBox')}
-                    />
                 </div>
                 <div>{currentGame} loaded</div>
                 <Playground/>
@@ -90,9 +84,9 @@ const mapStateToProps = (state: ApplicationState): any => {
 
 const mapDispatchToProps = (dispatch: any): AppProps => {
     return {
-        selectGame: (currentGame: string): any => dispatch({type: "GAME_SELECTED", currentGame}),
+        selectGame: (currentGame: string): any => dispatch({type: ReduxConstants.GAME_SELECTED, currentGame}),
         gameSetting: (setting: object): any => dispatch({
-            type: 'SETTING',
+            type: ReduxConstants.SETTING,
             setting
         })
     };
