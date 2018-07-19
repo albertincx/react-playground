@@ -5,19 +5,21 @@ import {compareArrays, getRandomCellPoint} from "Playground/components/games/Sna
 import CellTypes, {getColorByType} from "Playground/components/games/Snake/CellTypes";
 
 interface SnakeStateValues {
-    cells: any[],
-    snake: number[][],
-    foodCell: number[],
+    cells?: any[],
+    snake?: number[][],
+    foodCell?: number[],
     direction?: string,
+    boosterCell?: number[],
+    currentSpeed?: number
 }
 
 interface SnakeStateScore {
-    apples: number,
+    [key: string]: any
 }
 
 interface SnakeState {
-    score: SnakeStateScore,
-    values: SnakeStateValues,
+    score?: SnakeStateScore,
+    values?: SnakeStateValues,
 }
 
 const allowedKeys = [
@@ -31,6 +33,7 @@ const allowedKeys = [
 class Snake extends React.Component<CustomGameProps, SnakeState> {
     private canvas: HTMLCanvasElement;
     private running: any;
+    private boosterTimeout: any;
 
     constructor(props: CustomGameProps) {
         super(props);
@@ -42,8 +45,9 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
                 cells: [],
                 snake: [[0], [0]],
                 foodCell: null,
+                boosterCell: null,
                 direction: config.KEY_DOWN,
-
+                currentSpeed: 0,
             }
         };
 
@@ -52,6 +56,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
 
     public componentWillUnmount() {
         clearInterval(this.running);
+        clearTimeout(this.boosterTimeout);
     }
 
     public componentDidMount() {
@@ -59,6 +64,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
         if (isGameStarted && !isGameOver) {
             this.run();
         } else {
+            clearTimeout(this.boosterTimeout);
             clearInterval(this.running);
         }
     }
@@ -90,12 +96,20 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
     }
 
     private gameOver() {
+        const score = this.state.score;
+        score.speed = this.state.values.currentSpeed;
+        score.dimensions = [this.props.setting.width,
+            this.props.setting.height];
         this.props.gameOver(this.state.score);
     }
 
-    private loop() {
-        let timeout = config.MAX_SPEED - this.props.setting.speed;
-        if (this.props.setting.speed >= config.MAX_SPEED) {
+    private loop(newSpeed: number = 0) {
+        if (!newSpeed) {
+            newSpeed = this.props.setting.speed;
+        }
+        let timeout = config.MAX_SPEED - newSpeed;
+        if (newSpeed >= config.MAX_SPEED) {
+            // max GameSpeed
             timeout = 0.5;
         }
 
@@ -145,14 +159,23 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
     }
 
 
+    private destroyBooster(): void {
+        const {boosterCell, ...newValues} = this.state.values;
+        this.setState({
+            values: newValues
+        });
+    }
+
     private fillCells(startLoop: boolean = false): void {
 
         const {setting: {key, cellBox: currentCellBox}} = this.props;
         const {width, height} = this.props.setting;
         const direction = this.getPressedKey(key);
         const {values: {snake}, score} = this.state;
-        let {foodCell} = this.state.values;
-
+        let {foodCell, boosterCell, currentSpeed} = this.state.values;
+        if (!currentSpeed) {
+            currentSpeed = this.props.setting.speed;
+        }
         const cells = [];
 
         let currentDirectionAxis = config.AXIS_X;
@@ -179,6 +202,19 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
             randX = randX - (randX % cellBox);
             randY = randY - (randY % cellBox);
             foodCell = [randX, randY];
+        }
+
+        if (!boosterCell) {
+            let randX = getRandomCellPoint(width, 0);
+            let randY = getRandomCellPoint(0, height);
+            // floor to cellBox
+            randX = randX - (randX % cellBox);
+            randY = randY - (randY % cellBox);
+            boosterCell = [randX, randY];
+            clearTimeout(this.boosterTimeout);
+            this.boosterTimeout = setTimeout(() => {
+                this.destroyBooster();
+            }, 5000);
         }
 
         let growSnake: any | number[] = null;
@@ -217,8 +253,7 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
         if (snake[1][0] > height) {
             snake[1][0] = 0;
         }
-        /*width -= cellBox;
-        height -= cellBox;*/
+        let boostGame = false;
         for (let i = 0; i < width + 1; i++) {
             const rowCells = [];
             for (let j = 0; j < height + 1; j++) {
@@ -231,10 +266,18 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
                     if (isFoodCell) {
                         type = CellTypes.FOOD;
                     }
+                    const isBooster = compareArrays(boosterCell, currentCell);
+                    if (isBooster) {
+                        type = CellTypes.BOOSTER;
+                    }
+
                     if (this.isSnakeBody(currentCell, snake)) {
                         type = CellTypes.SNAKE;
                         if (isFoodCell) {
                             growSnake = currentCell;
+                        }
+                        if (isBooster) {
+                            boostGame = true;
                         }
                     }
                     rowCells.push(type);
@@ -251,20 +294,29 @@ class Snake extends React.Component<CustomGameProps, SnakeState> {
             foodCell = null;
             score.apples++;
         }
-
+        if (startLoop) {
+            this.loop();
+        } else if (boostGame) {
+            boosterCell = null;
+            if (currentSpeed >= 6) {
+                currentSpeed += 0.5;
+            } else {
+                currentSpeed += config.SPEED_STEP;
+            }
+            this.loop(currentSpeed);
+        }
         this.setState({
             score,
             values: {
                 cells,
                 foodCell,
+                boosterCell,
                 snake,
-                direction
+                direction,
+                currentSpeed
             }
         });
 
-        if (startLoop) {
-            this.loop();
-        }
 
         this.draw(cells);
     }

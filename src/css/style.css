@@ -26,13 +26,18 @@
   border-radius: 9px;
   opacity: 0.3;
   line-height: 32px;
-  animation: LineHeight 0.05s linear forwards 0.03s;
+  animation: LineHeight 0.4s linear forwards 0.03s;
 }
 @keyframes LineHeight {
   100% {
     line-height: 112px;
     font-size: 87px;
   }
+}
+.application .playground .game-space .game-over-wrapper .score {
+  z-index: 333;
+  position: relative;
+  font-size: 32px;
 }
 .application .playground .game-space .game-over-wrapper button {
   padding: 16px;

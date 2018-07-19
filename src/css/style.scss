@@ -32,7 +32,12 @@
           border-radius: 9px;
           opacity: 0.3;
           line-height: 32px;
-          animation: LineHeight 0.05s linear forwards 0.03s;
+          animation: LineHeight 0.4s linear forwards 0.03s;
+        }
+        .score {
+          z-index: 333;
+          position: relative;
+          font-size: 32px;
         }
         button {
           padding: 16px;

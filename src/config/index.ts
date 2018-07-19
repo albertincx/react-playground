@@ -1,5 +1,6 @@
 const MAX_SPEED = 10;
 const MIN_SPEED = 3;
+const SPEED_STEP = 1;
 const MIN_WIDTH = 500;
 const MIN_HEIGHT = 250;
 
@@ -22,6 +23,7 @@ interface ConstObject {
     readonly MIN_WIDTH: number,
     readonly MIN_HEIGHT: number,
     readonly CELL_BOX: number,
+    readonly SPEED_STEP: number,
 
     readonly KEY_LEFT: string,
     readonly KEY_RIGHT: string,
@@ -38,6 +40,7 @@ interface ConstObject {
 const Config: ConstObject = {
     MAX_SPEED,
     MIN_SPEED,
+    SPEED_STEP,
     MIN_WIDTH,
     MIN_HEIGHT,
     CELL_BOX,

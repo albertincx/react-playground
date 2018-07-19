@@ -54,7 +54,7 @@ class App extends React.Component<AppProps, {}> {
                         min={1}
                         max={config.MAX_SPEED}
                         value={setting.speed}
-                        step={1}
+                        step={config.SPEED_STEP}
                         onChange={(value: number) => this.handleChange(value, 'speed')}
                     />
                 </div>
